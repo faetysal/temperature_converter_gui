@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:group_button/group_button.dart';
 
 void main() {
   runApp(const TemperatureConverter());
@@ -75,23 +77,8 @@ class Home extends StatelessWidget {
                             )
                           ),
                           const SizedBox(height: 8,),
-                          SizedBox(
-                            height: 50,
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Container(color: Colors.grey[200],),
-                                ),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: Container(color: Colors.grey[200],),
-                                ),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: Container(color: Colors.grey[200],),
-                                ),
-                              ],
-                            )
+                          const SizedBox(
+                            child: CustomRadioButtonList(id: 0)
                           )
                         ],
                       ),
@@ -106,7 +93,7 @@ class Home extends StatelessWidget {
                           color: Colors.grey[200]!
                         )
                       ),
-                      child: Column(
+                      child: const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Output', style: TextStyle(
@@ -114,24 +101,10 @@ class Home extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                             color: Colors.teal
                           )),
-                          const SizedBox(height: 16),
+                          SizedBox(height: 16),
                           SizedBox(
                             height: 50,
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Container(color: Colors.grey[200],),
-                                ),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: Container(color: Colors.grey[200],),
-                                ),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: Container(color: Colors.grey[200],),
-                                ),
-                              ],
-                            )
+                            child: CustomRadioButtonList(id: 1)
                           )
                         ],
                       )
@@ -174,5 +147,81 @@ class Home extends StatelessWidget {
         ),
       )
     );
+  }
+}
+
+class CustomRadioButton extends StatelessWidget {
+  const CustomRadioButton({super.key, this.label = '', this.selected = false, this.onTap});
+
+  final String label;
+  final bool selected;
+  final void Function()? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 50,
+      child: TextButton(
+        style: TextButton.styleFrom(
+          backgroundColor: selected ? Colors.teal : Colors.grey[200],
+          foregroundColor: selected ? Colors.white : Colors.black,
+
+          shape: const RoundedRectangleBorder()
+        ),
+        onPressed: onTap, 
+        child: Text(label)
+      )
+    );
+  }
+}
+
+class CustomRadioButtonList extends StatelessWidget {
+  const CustomRadioButtonList({super.key, this.id});
+
+  final int? id;
+
+  @override
+  Widget build(BuildContext context) {
+    CustomRadioButtonListController controller = Get.put(CustomRadioButtonListController(), tag: id?.toString());
+
+    return Obx(() {
+      return Row(
+        children: [
+          Expanded(
+            child: CustomRadioButton(
+              selected: controller.index.value == 0,
+              label: 'Celcius',
+              onTap: () => controller.index.value = 0,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: CustomRadioButton(
+              selected: controller.index.value == 1,
+              label: 'Fahrenheit',
+              onTap: () => controller.index.value = 1,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: CustomRadioButton(
+              selected: controller.index.value == 2,
+              label: 'Kelvin',
+              onTap: () => controller.index.value = 2,
+            ),
+          ),
+        ],
+      );
+    });
+  }
+}
+
+class CustomRadioButtonListController extends GetxController {
+  RxInt index = 0.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    print("Initing...");
   }
 }
