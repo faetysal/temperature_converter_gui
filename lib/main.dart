@@ -28,6 +28,14 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    HomeController controller = Get.put(HomeController());
+
+    const List scales = [
+      { 'title': 'Celcius', 'value': 'c' },
+      { 'title': 'Fahrenheit', 'value': 'f' },
+      { 'title': 'Kelvin', 'value': 'k' },
+    ];
+
     return Scaffold(
       body: Container(
         child: Row(
@@ -77,9 +85,21 @@ class Home extends StatelessWidget {
                             )
                           ),
                           const SizedBox(height: 8,),
-                          const SizedBox(
-                            child: CustomRadioButtonList(id: 0)
-                          )
+                          Obx(() => SizedBox(
+                            child: RadioButtonList(
+                              value: controller.inputUnit.value,
+                              onChanged: (String v) {
+                                print('Value changed: $v');
+                                controller.inputUnit.value = v;
+                              },
+                              children: scales.map((s) {
+                                return RadioButton(
+                                  label: s['title'],
+                                  value: s['value']
+                                );
+                              }).toList(),
+                            )
+                          ))
                         ],
                       ),
                     ),
@@ -93,7 +113,7 @@ class Home extends StatelessWidget {
                           color: Colors.grey[200]!
                         )
                       ),
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Output', style: TextStyle(
@@ -101,11 +121,20 @@ class Home extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                             color: Colors.teal
                           )),
-                          SizedBox(height: 16),
-                          SizedBox(
-                            height: 50,
-                            child: CustomRadioButtonList(id: 1)
-                          )
+                          const SizedBox(height: 16),
+                          Obx(() => SizedBox(
+                            child: RadioButtonList(
+                              value: controller.outputUnit.value,
+                              onChanged: (String v) {
+                                print('Output unit changed: $v');
+                                controller.outputUnit.value = v;
+                              },
+                              children: scales.map((s) => RadioButton(
+                                label: s['title'],
+                                value: s['value']
+                              )).toList()
+                            )
+                          ))
                         ],
                       )
                     ),
@@ -150,78 +179,55 @@ class Home extends StatelessWidget {
   }
 }
 
-class CustomRadioButton extends StatelessWidget {
-  const CustomRadioButton({super.key, this.label = '', this.selected = false, this.onTap});
+class HomeController extends GetxController {
+  RxString inputUnit = 'c'.obs;
+  RxString outputUnit = 'f'.obs;
+}
+
+class RadioButton extends StatelessWidget {
+  // ignore: prefer_const_constructors_in_immutables
+  RadioButton({super.key, this.label = '', required this.value});
 
   final String label;
-  final bool selected;
-  final void Function()? onTap;
+  final String value;
 
   @override
   Widget build(BuildContext context) {
+    final parent = context.findAncestorWidgetOfExactType<RadioButtonList>();
+
     return SizedBox(
       height: 50,
       child: TextButton(
         style: TextButton.styleFrom(
-          backgroundColor: selected ? Colors.teal : Colors.grey[200],
-          foregroundColor: selected ? Colors.white : Colors.black,
-
+          backgroundColor: parent!.value == value ? Colors.teal : Colors.grey[200],
+          foregroundColor: parent.value == value ? Colors.white : Colors.black,
           shape: const RoundedRectangleBorder()
         ),
-        onPressed: onTap, 
+        onPressed: () {
+          parent.onChanged(value);
+        }, 
         child: Text(label)
       )
     );
   }
 }
 
-class CustomRadioButtonList extends StatelessWidget {
-  const CustomRadioButtonList({super.key, this.id});
+class RadioButtonList extends StatelessWidget {
+  const RadioButtonList({
+    super.key, 
+    required this.value,
+    required this.onChanged,
+    this.children = const []
+  });
 
-  final int? id;
+  final String value;
+  final void Function(String s) onChanged;
+  final List children;
 
   @override
   Widget build(BuildContext context) {
-    CustomRadioButtonListController controller = Get.put(CustomRadioButtonListController(), tag: id?.toString());
-
-    return Obx(() {
-      return Row(
-        children: [
-          Expanded(
-            child: CustomRadioButton(
-              selected: controller.index.value == 0,
-              label: 'Celcius',
-              onTap: () => controller.index.value = 0,
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: CustomRadioButton(
-              selected: controller.index.value == 1,
-              label: 'Fahrenheit',
-              onTap: () => controller.index.value = 1,
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: CustomRadioButton(
-              selected: controller.index.value == 2,
-              label: 'Kelvin',
-              onTap: () => controller.index.value = 2,
-            ),
-          ),
-        ],
-      );
-    });
-  }
-}
-
-class CustomRadioButtonListController extends GetxController {
-  RxInt index = 0.obs;
-
-  @override
-  void onInit() {
-    super.onInit();
-    print("Initing...");
+    return Row(
+      children: children.map((c) => Expanded(child: c)).toList()
+    );
   }
 }
