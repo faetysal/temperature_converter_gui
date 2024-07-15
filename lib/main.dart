@@ -36,30 +36,105 @@ class Home extends StatelessWidget {
                   horizontal: 32,
                   vertical: 64
                 ),
-                color: Colors.grey[200],
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                color: Colors.white,
+                child: ListView(
+                  physics: const NeverScrollableScrollPhysics(),
                   children: [
-                    Text('TEMPERATURE CONVERTER'),
+                    Text('TEMPERATURE CONVERTER', style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.teal
+                    )),
                     const SizedBox(height: 16),
                     Container(
-                      height: 70,
+                      padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: Colors.grey
+                          color: Colors.grey[200]!
                         )
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Input', style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.teal
+                          )),
+                          const SizedBox(height: 16),
+                          SizedBox(
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey[100]!)
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey[100]!)
+                                )
+                              ),
+                            )
+                          ),
+                          const SizedBox(height: 8,),
+                          SizedBox(
+                            height: 50,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Container(color: Colors.grey[200],),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Container(color: Colors.grey[200],),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Container(color: Colors.grey[200],),
+                                ),
+                              ],
+                            )
+                          )
+                        ],
                       ),
                     ),
 
                     const SizedBox(height: 100),
 
                     Container(
-                      height: 70,
+                      padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: Colors.grey
+                          color: Colors.grey[200]!
                         )
                       ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Output', style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.teal
+                          )),
+                          const SizedBox(height: 16),
+                          SizedBox(
+                            height: 50,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Container(color: Colors.grey[200],),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Container(color: Colors.grey[200],),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Container(color: Colors.grey[200],),
+                                ),
+                              ],
+                            )
+                          )
+                        ],
+                      )
                     ),
 
                     const SizedBox(height: 100),
@@ -87,7 +162,11 @@ class Home extends StatelessWidget {
               child: Container(
                 color: Colors.teal,
                 child: Center(
-                  child: Text('0'),
+                  child: Text('0', style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 140,
+                    fontWeight: FontWeight.w600
+                  )),
                 ),
               )
             )
