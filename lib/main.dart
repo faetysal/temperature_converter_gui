@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:group_button/group_button.dart';
 
@@ -74,7 +75,13 @@ class Home extends StatelessWidget {
                           const SizedBox(height: 16),
                           SizedBox(
                             child: TextFormField(
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                  RegExp(r'^-?(\d+(\.(\d+)?)?)?'),
+                                )
+                              ],
                               decoration: InputDecoration(
+                                hintText: 'Enter input temperature',
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey[100]!)
                                 ),
@@ -89,7 +96,7 @@ class Home extends StatelessWidget {
                             child: RadioButtonList(
                               value: controller.inputUnit.value,
                               onChanged: (String v) {
-                                print('Value changed: $v');
+                                print('Input unit changed: $v');
                                 controller.inputUnit.value = v;
                               },
                               children: scales.map((s) {
