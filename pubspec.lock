@@ -57,6 +57,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
+  ffi:
+    dependency: transitive
+    description:
+      name: ffi
+      sha256: "493f37e7df1804778ff3a53bd691d8692ddf69702cf4c1c1096a2e41b4779e21"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.2"
+  fixnum:
+    dependency: transitive
+    description:
+      name: fixnum
+      sha256: "25517a4deb0c03aa0f32fd12db525856438902d9c16536311e76cdc57b31d7d1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -91,6 +107,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.3.4"
+  internet_connection_checker:
+    dependency: transitive
+    description:
+      name: internet_connection_checker
+      sha256: "1c683e63e89c9ac66a40748b1b20889fd9804980da732bf2b58d6d5456c8e876"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0+1"
   leak_tracker:
     dependency: transitive
     description:
@@ -147,6 +171,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
+  package_config:
+    dependency: transitive
+    description:
+      name: package_config
+      sha256: "1c5b77ccc91e4823a5af61ee74e6b972db1ef98c2ff5a18d3161c982a55448bd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   path:
     dependency: transitive
     description:
@@ -155,6 +187,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.0"
+  protobuf:
+    dependency: "direct main"
+    description:
+      name: protobuf
+      sha256: "68645b24e0716782e58948f8467fd42a880f255096a821f9e7d0ec625b00c84d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
+  rinf:
+    dependency: "direct main"
+    description:
+      name: rinf
+      sha256: "1a7a2159cad630aec3e5a9fc391fbc2357eaf8aa6b3f350aa88ab64c673fb737"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.14.2"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -224,6 +272,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "13.0.0"
+  watcher:
+    dependency: transitive
+    description:
+      name: watcher
+      sha256: "3d2ad6751b3c16cf07c7fca317a1413b3f26530319181b37e3b9039b84fc01d8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
+  yaml:
+    dependency: transitive
+    description:
+      name: yaml
+      sha256: "75769501ea3489fca56601ff33454fe45507ea3bfb014161abc3b43ae25989d5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.2"
 sdks:
   dart: ">=3.3.1 <4.0.0"
   flutter: ">=3.13.0"

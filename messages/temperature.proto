@@ -1,0 +1,8 @@
+syntax = "proto3";
+package temperature;
+
+// [RINF:DART-SIGNAL]
+message InputTemperature {
+  float value = 1;
+  string unit = 2;
+}
