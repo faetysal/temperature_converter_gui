@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:group_button/group_button.dart';
 
+import 'constants.dart';
+
 void main() {
   runApp(const TemperatureConverter());
 }
@@ -54,7 +56,7 @@ class Home extends StatelessWidget {
                     Text('TEMPERATURE CONVERTER', style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: Colors.teal
+                      color: pryColor
                     )),
                     const SizedBox(height: 16),
                     Container(
@@ -70,18 +72,22 @@ class Home extends StatelessWidget {
                           Text('Input', style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
-                            color: Colors.teal
+                            color: pryColor
                           )),
                           const SizedBox(height: 16),
                           SizedBox(
                             child: TextFormField(
+                              onChanged: (v) {
+                                controller.inputValue.value = double.tryParse(v);
+                                controller.outputValue.value = double.tryParse(v);
+                              },
                               inputFormatters: [
                                 FilteringTextInputFormatter.allow(
-                                  RegExp(r'^-?(\d+(\.(\d+)?)?)?'),
+                                  RegExp(r'^-?(\d+(\.(\d+)?)?)?')
                                 )
                               ],
                               decoration: InputDecoration(
-                                hintText: 'Enter input temperature',
+                                hintText: 'Temperature',
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey[100]!)
                                 ),
@@ -126,7 +132,7 @@ class Home extends StatelessWidget {
                           Text('Output', style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
-                            color: Colors.teal
+                            color: pryColor
                           )),
                           const SizedBox(height: 16),
                           Obx(() => SizedBox(
@@ -146,14 +152,14 @@ class Home extends StatelessWidget {
                       )
                     ),
 
-                    const SizedBox(height: 100),
+                    /*const SizedBox(height: 100),
 
                     SizedBox(
                       width: double.infinity,
                       height: 50,
                       child: TextButton(
                         style: TextButton.styleFrom(
-                          backgroundColor: Colors.teal,
+                          backgroundColor: pryColor,
                           foregroundColor: Colors.white
                         ),
                         onPressed: () {
@@ -161,23 +167,30 @@ class Home extends StatelessWidget {
                         }, 
                         child: Text('Convert')
                       )
-                    )
+                    )*/
                     
                   ],
                 ),
               )
             ),
             Expanded(
-              child: Obx(() => Container(
-                color: Colors.teal,
-                child: Center(
-                  child: Text("0${controller.outputUnit.value}", style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 140,
-                    fontWeight: FontWeight.w600
-                  )),
-                ),
-              ))
+              child: Obx(() {
+                /*String outputStr = '-';
+                if (controller.outputValue.value != null) {
+                  outputStr = "${controller.outputValue}${controller.outputUnit}";
+                }*/
+
+                return Container(
+                  color: pryColor,
+                  child: Center(
+                    child: Text(controller.outputString, style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 140,
+                      fontWeight: FontWeight.w600
+                    )),
+                  ),
+                );
+              })
             )
           ],
         ),
@@ -189,6 +202,23 @@ class Home extends StatelessWidget {
 class HomeController extends GetxController {
   RxString inputUnit = '°C'.obs;
   RxString outputUnit = '°F'.obs;
+
+  Rx<double?> inputValue = Rxn<double>();
+  Rx<double?> outputValue = Rxn<double>();
+
+  String get outputString {
+    if (outputValue.value == null) {
+      return '-';
+    }
+
+    final isZero = outputValue.truncateToDouble() == outputValue.value;
+    final output = outputValue.toStringAsFixed(isZero ? 0 : 2);
+    return "$output$outputUnit";
+  }
+
+  void convert() {
+
+  }
 }
 
 class RadioButton extends StatelessWidget {
@@ -206,7 +236,7 @@ class RadioButton extends StatelessWidget {
       height: 50,
       child: TextButton(
         style: TextButton.styleFrom(
-          backgroundColor: parent!.value == value ? Colors.teal : Colors.grey[200],
+          backgroundColor: parent!.value == value ? pryColor : Colors.grey[200],
           foregroundColor: parent.value == value ? Colors.white : Colors.black,
           shape: const RoundedRectangleBorder()
         ),
