@@ -67,7 +67,7 @@ class Home extends StatelessWidget {
                     children: [
                       Text('Input',
                           style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 16,
                               fontWeight: FontWeight.w600,
                               color: pryColor)),
                       const SizedBox(height: 16),
@@ -75,10 +75,12 @@ class Home extends StatelessWidget {
                           child: TextFormField(
                         onChanged: (v) {
                           controller.inputScale.value.value = double.tryParse(v);
-                          controller.outputScale.value.value = double.tryParse(v);
-                          controller.outputScale.refresh();
-
-                          controller.convert();
+                          if (v.isEmpty) {
+                            controller.outputScale.value.value = null;
+                            controller.outputScale.refresh();
+                          } else {
+                            controller.convert();
+                          }
                         },
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
@@ -121,7 +123,7 @@ class Home extends StatelessWidget {
                       children: [
                         Text('Output',
                             style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w600,
                                 color: pryColor)),
                         const SizedBox(height: 16),
@@ -159,23 +161,31 @@ class Home extends StatelessWidget {
               ],
             ),
           )),
-          Expanded(child: Obx(() {
-            /*String outputStr = '-';
-                  if (controller.outputValue.value != null) {
-                    outputStr = "${controller.outputValue}${controller.outputUnit}";
-                  }*/
-
-            return Container(
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 32),
               color: pryColor,
               child: Center(
-                child: Text(controller.outputString,
-                    style: const TextStyle(
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: StreamBuilder(
+                    stream: OutputTemperature.rustSignalStream, 
+                    builder:(context, snap) {
+                      if (snap.hasData) {
+                        final outputTemp = snap.data!.message;
+                        controller.outputScale.value.value = double.parse(outputTemp.value);
+                      }
+
+                      return Obx(() => Text(controller.outputString, style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 140,
-                        fontWeight: FontWeight.w600)),
-              ),
-            );
-          }))
+                        fontSize: 100,
+                        fontWeight: FontWeight.w600
+                      )));
+                    },
+                  )
+              )),
+            )
+          )
         ],
       ),
     ));
@@ -199,9 +209,11 @@ class HomeController extends GetxController {
   }
 
   void convert() {
+    print("Converting...");
     InputTemperature(
       value: inputScale.value.value,
-      unit: inputScale.value.character
+      inputUnit: inputScale.value.character,
+      outputUnit: outputScale.value.character
     ).sendSignalToRust();
   }
 }

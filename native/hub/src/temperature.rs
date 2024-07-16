@@ -2,14 +2,14 @@ use std::{io, fmt};
 
 #[derive(Debug)]
 #[allow(dead_code)]
-enum TemperatureScaleKind {
+pub enum TemperatureScaleKind {
   Celcius(String),
   Kelvin(String),
   Fahrenheit(String)
 }
 
 impl TemperatureScaleKind {
-  fn unit(&self) -> String {
+  pub fn unit(&self) -> String {
     match self {
       Self::Celcius(u) | Self::Kelvin(u) | Self::Fahrenheit(u) => u.to_string()
     }
@@ -18,10 +18,10 @@ impl TemperatureScaleKind {
   
 #[derive(Debug)]
 #[allow(dead_code)]
-struct TemperatureScale {
+pub struct TemperatureScale {
   min: f32,
   max: f32,
-  kind: TemperatureScaleKind
+  pub kind: TemperatureScaleKind
 }
 
 
@@ -44,9 +44,9 @@ impl TemperatureScale {
 }
 
 #[derive(Debug)]
-struct Temperature {
-  value: f32,
-  scale: TemperatureScale
+pub struct Temperature {
+  pub value: f32,
+  pub scale: TemperatureScale
 }
 
 impl fmt::Display for Temperature {
@@ -57,14 +57,14 @@ impl fmt::Display for Temperature {
 }
 
 impl Temperature {
-  fn new(value: f32, unit: &str) -> Self {
+  pub fn new(value: f32, unit: &str) -> Self {
     Self {
       value,
       scale: TemperatureScale::from(unit)
     }
   }
 
-  fn to(&self, unit: &str) -> Self {
+  pub fn to(&self, unit: &str) -> Self {
     let scale: TemperatureScale = TemperatureScale::from(unit);
     let (x0, x1) = self.scale.temperature();
     let (y0, y1) = scale.temperature();
@@ -77,7 +77,7 @@ impl Temperature {
   }
 }
 
-fn main() {
+/*fn main() {
   println!("\n{x} Temperature Converter {x}\n", x = "#".repeat(5));
   println!("(C = Celcius, K = Kelvin, F = Fahrenheit");
 
@@ -110,23 +110,4 @@ fn main() {
   );
 
   // println!("75C -> F = {}", output_temperature);
-}
-
-fn unit_prompt(message: &str) -> String {
-  loop {
-    println!("{message}");
-    let mut input_unit = String::new();
-    io::stdin()
-      .read_line(&mut input_unit)
-      .expect("Failed to read line");
-
-    let x = input_unit.trim().to_lowercase();
-    match  x.as_str() {
-      "c" | "k" | "f" => break x,
-      _ => {
-        println!("Invalid unit");
-        continue 
-      }
-    };
-  }
-}
+}*/

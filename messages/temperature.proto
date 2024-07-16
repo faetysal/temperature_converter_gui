@@ -4,5 +4,12 @@ package temperature;
 // [RINF:DART-SIGNAL]
 message InputTemperature {
   float value = 1;
-  string unit = 2;
+  string input_unit = 2;
+  string output_unit = 3;
+}
+
+// [RINF:RUST-SIGNAL]
+message OutputTemperature {
+  string value = 1;
+  string output_unit = 2;
 }
