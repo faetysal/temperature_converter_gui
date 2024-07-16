@@ -31,10 +31,10 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     HomeController controller = Get.put(HomeController());
 
-    const List scales = [
-      { 'title': 'Celcius', 'value': 'c' },
-      { 'title': 'Fahrenheit', 'value': 'f' },
-      { 'title': 'Kelvin', 'value': 'k' },
+    List<TemperatureScale> scales = [
+      TemperatureScale(title: 'Celcius', unit: '°C'),
+      TemperatureScale(title: 'Fahrenheit', unit: '°F'),
+      TemperatureScale(title: 'Kelvin', unit: 'K')
     ];
 
     return Scaffold(
@@ -101,8 +101,8 @@ class Home extends StatelessWidget {
                               },
                               children: scales.map((s) {
                                 return RadioButton(
-                                  label: s['title'],
-                                  value: s['value']
+                                  label: s.title,
+                                  value: s.unit
                                 );
                               }).toList(),
                             )
@@ -137,8 +137,8 @@ class Home extends StatelessWidget {
                                 controller.outputUnit.value = v;
                               },
                               children: scales.map((s) => RadioButton(
-                                label: s['title'],
-                                value: s['value']
+                                label: s.title,
+                                value: s.unit
                               )).toList()
                             )
                           ))
@@ -168,16 +168,16 @@ class Home extends StatelessWidget {
               )
             ),
             Expanded(
-              child: Container(
+              child: Obx(() => Container(
                 color: Colors.teal,
                 child: Center(
-                  child: Text('0', style: TextStyle(
+                  child: Text("0${controller.outputUnit.value}", style: TextStyle(
                     color: Colors.white,
                     fontSize: 140,
                     fontWeight: FontWeight.w600
                   )),
                 ),
-              )
+              ))
             )
           ],
         ),
@@ -187,8 +187,8 @@ class Home extends StatelessWidget {
 }
 
 class HomeController extends GetxController {
-  RxString inputUnit = 'c'.obs;
-  RxString outputUnit = 'f'.obs;
+  RxString inputUnit = '°C'.obs;
+  RxString outputUnit = '°F'.obs;
 }
 
 class RadioButton extends StatelessWidget {
@@ -237,4 +237,20 @@ class RadioButtonList extends StatelessWidget {
       children: children.map((c) => Expanded(child: c)).toList()
     );
   }
+}
+
+class TemperatureScale {
+  String title;
+  double value;
+  String unit;
+
+  TemperatureScale({
+    this.title = '',
+    this.value = 0.0,
+    this.unit = ''
+  });
+
+  /*factory TemperatureScale.fromJson(json) {
+    return TemperatureScale();
+  }*/
 }
