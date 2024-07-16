@@ -102,9 +102,15 @@ class Home extends StatelessWidget {
                               child: RadioButtonList(
                             value: controller.inputScale.value.unit,
                             onChanged: (String v) {
-                              print('Input unit changed: $v');
-                              controller.inputScale.value.unit = v;
-                              controller.inputScale.refresh();
+                              final temp = TemperatureScale.fromSymbol(v);
+                              temp.value = controller.inputScale.value.value;
+                              controller.inputScale.value = temp;
+                              print('Input unit changed: ${controller.inputScale.value.unit}');
+                              // controller.inputScale.refresh();
+
+                              if (controller.inputScale.value.value != null) {
+                                controller.convert();
+                              }
                             },
                             children: scales.map((s) {
                               return RadioButton(label: s.title, value: s.unit);
@@ -131,9 +137,12 @@ class Home extends StatelessWidget {
                             child: RadioButtonList(
                                 value: controller.outputScale.value.unit,
                                 onChanged: (String v) {
-                                  print('Output unit changed: $v');
-                                  controller.outputScale.value.unit = v;
-                                  controller.outputScale.refresh();
+                                  controller.outputScale.value = TemperatureScale.fromSymbol(v);
+                                  print('Output unit changed: ${controller.outputScale.value.unit}');
+
+                                  if (controller.inputScale.value.value != null) {
+                                    controller.convert();
+                                  }
                                 },
                                 children: scales
                                     .map((s) => RadioButton(
@@ -292,5 +301,16 @@ class TemperatureScale {
       unit: 'K',
       character: 'k'
     );
+  }
+
+  factory TemperatureScale.fromSymbol(String symbol) {
+    switch (symbol) {
+      case '°F':
+        return TemperatureScale.fahrenheit();
+      case 'K':
+        return TemperatureScale.kelvin();
+      default:
+          return TemperatureScale.celcius();
+    }
   }
 }
